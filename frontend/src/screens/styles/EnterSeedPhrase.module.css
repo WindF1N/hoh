@@ -1,0 +1,66 @@
+.main {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.main > h1 {
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 4vh;
+  letter-spacing: -2px;
+  color: #fff;
+
+  margin-top: 40px;
+}
+
+.text {
+  text-align: center;
+  color: #ccc;
+  font-size: var(--font16px);
+  margin-top: 16px;
+}
+
+.fixedBottom {
+  position: fixed;
+  bottom: 20px;
+  width: calc(100% - 20px);
+  max-width: 500px;
+}
+
+.repeat {
+  margin-top: 32px;
+}
+
+.phrase {
+  border-radius: 15px;
+  border: 1px solid #4F4F4F;
+  background: #111113;
+  backdrop-filter: blur(5.5px);
+  padding: 10px 14px;
+
+  margin-top: 16px;
+}
+
+.phrase > textarea {
+  color: #fff;
+  /* Text/Small */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  letter-spacing: -0.2px;
+
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+
+  width: 100%;
+  resize: none;
+}

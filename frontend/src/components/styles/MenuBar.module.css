@@ -1,0 +1,30 @@
+.menubar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: var(--main-bg-color);
+
+  padding: 20px 0 30px 0;
+
+  position: sticky;
+  bottom: -10px;
+}
+
+.menubar > div {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.menubar > div > img {
+  width: 24px;
+}
+
+.menubar > div > span {
+  color: #999;
+  font-weight: 400;
+  font-size: 10px;
+}

@@ -1,0 +1,25 @@
+.header {
+  color: var(--main-color);
+  font-size: var(--font20px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 10px;
+
+  border-bottom: 1px solid #3B3B3B;
+}
+
+.header > div {
+  min-width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header > div > img {
+  width: 28px;
+}

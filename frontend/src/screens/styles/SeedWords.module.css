@@ -1,0 +1,64 @@
+.main {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.main > h1 {
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 4vh;
+  letter-spacing: -2px;
+  color: #fff;
+
+  margin-top: 40px;
+}
+
+.text {
+  text-align: center;
+  color: #ccc;
+  font-size: var(--font16px);
+  margin-top: 24px;
+}
+
+.words {
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.words > div {
+  background-color: #18181A;
+  color: white;
+  padding: 12px;
+  border-radius: 15px;
+
+  font-size: var(--font20px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+
+  text-align: center;
+
+  width: calc(50% - 4px);
+  box-sizing: border-box;
+}
+
+.words > div > span {
+  color: #999;
+}
+
+.fixedBottom {
+  position: fixed;
+  bottom: 20px;
+  width: calc(100% - 20px);
+  max-width: 500px;
+}

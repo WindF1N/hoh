@@ -1,0 +1,54 @@
+.input {
+  position: relative;
+  width: 100%;
+  background: #111113;
+  border-radius: 15px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  border: 1px solid #4f4f4f;
+  display: flex;
+  flex-flow: column;
+}
+
+.input.inputError {
+  border: 1px solid #F92A4D;
+}
+
+.input.inputFocused {
+  border: 1px solid #999999;
+}
+
+.input input {
+  font-size: var(--font16px);
+  letter-spacing: -.2px;
+  line-height: 1;
+  outline: none;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  color: white;
+  background-color: inherit;
+  margin: 0;
+  width: 100%;
+}
+
+.input label {
+  color: #999;
+  font-size: var(--font12px);
+  transition: .2s;
+}
+
+.showPassword {
+  position: absolute;
+  top: 55%;
+  right: 14px;
+  transform: translateY(-50%);
+}
+
+.off {
+  transform: scale(1.2) translateX(8.4%) translateY(55%);
+}
+
+.input.inputError label {
+  color: #F92A4D;
+}

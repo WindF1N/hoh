@@ -1,0 +1,33 @@
+.question {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.question > div {
+  font-size: var(--font14px);
+  color: #999999;
+  flex-shrink: 0;
+  width: auto;
+  position: relative;
+}
+
+.question > div:first-child, .question > div:last-child {
+  width: 100%;
+}
+
+.question > div:first-child > div, .question > div:last-child > div {
+  width: 100%;
+  height: 1px;
+  background-color: #999999;
+}
+
+.question > div:nth-child(2) {
+  flex-shrink: 1;
+  padding: 16px 10px;
+  white-space: nowrap;
+}

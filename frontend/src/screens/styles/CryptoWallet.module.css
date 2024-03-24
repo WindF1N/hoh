@@ -1,0 +1,66 @@
+.main {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  padding: 0 10px;
+}
+
+.poster {
+  background-image: url('../images/bg2.svg');
+  background-size: cover;
+  width: var(--width2, calc(100% + 20px));
+  height: 40vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: -10px;
+}
+
+.poster img {
+  width: 50%;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+.title h1 {
+  color: var(--main-color);
+  font-size: var(--font32px);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -2px;
+  margin: 0;
+  padding: 0;
+}
+
+.title img {
+  width: 32px;
+  height: 32px;
+}
+
+.description {
+  font-size: var(--font16px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 137.5% */
+  color: #ccc;
+
+  margin-top: 24px;
+}
+
+.fixedBottom {
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 20px;
+  width: calc(100% - 20px);
+  max-width: 500px;
+}

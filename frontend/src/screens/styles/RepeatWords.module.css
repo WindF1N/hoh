@@ -1,0 +1,81 @@
+.main {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.main > h1 {
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: 4vh;
+  letter-spacing: -2px;
+  color: #fff;
+
+  margin-top: 40px;
+}
+
+.text {
+  text-align: center;
+  color: #ccc;
+  font-size: var(--font16px);
+  margin-top: 24px;
+}
+
+.fixedBottom {
+  position: fixed;
+  bottom: 20px;
+  width: calc(100% - 20px);
+  max-width: 500px;
+}
+
+.repeat {
+  margin-top: 32px;
+}
+
+.selectedWords {
+  display: flex;
+  min-height: 20vw;
+  padding: 24px;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+  flex-wrap: wrap;
+
+  border-radius: 20px;
+  border: 1px solid var(--Stroke-Initial-alt, #3B3B3B);
+  background: var(--Primitive-Grascale-05, #18181A);
+  backdrop-filter: blur(3px);
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-top: 16px;
+}
+
+.words > div, .selectedWords > div {
+  padding: 12px;
+
+  color: #FFF;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  border-radius: 15px;
+  background: #18181A;
+  backdrop-filter: blur(3px);
+}
+
+.selectedWords > div {
+  border: 1px solid #3B3B3B
+}

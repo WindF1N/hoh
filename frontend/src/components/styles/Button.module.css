@@ -1,0 +1,31 @@
+.button {
+  position: relative;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  background-color: var(--main-color);
+  border-radius: 15px;
+
+  padding: 17px;
+  border: 2px solid var(--main-color);
+
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #000;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 700;
+
+  backdrop-filter: blur(10px);
+
+  white-space: nowrap;
+}
+
+.button img {
+  height: 22px;
+}

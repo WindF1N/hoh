@@ -1,0 +1,149 @@
+.header {
+  background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+
+  padding: 12px 10px 40px 10px;
+
+  z-index: 1;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avatar {
+  padding: 2px;
+  border: .5px solid #363636;
+
+  border-radius: 50%;
+
+  height: 40px;
+  width: 40px;
+
+  pointer-events: all;
+}
+
+.avatar img {
+  width: 100%;
+}
+
+.wallet {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(204, 204, 204, 1);
+
+  gap: 12px;
+
+  border-radius: 12px;
+}
+
+.wallet > div {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+}
+
+.wallet > div:first-child {
+  padding: 10px 0 10px 12.5px;
+}
+
+.wallet > div:last-child {
+  background: rgba(255, 255, 255, 0.1);
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+}
+
+.wallet > div:first-child > img {
+  width: 24px;
+  height: 24px;
+}
+
+.wallet > div > img {
+  height: 24px;
+  width: 24px;
+}
+
+.wallet > div > span {
+  font-size: 15px;
+}
+
+.jackpot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px;
+  border-radius: 15px;
+
+  border: 2px solid rgba(255, 255, 255, 0.3);
+
+  margin-top: 10px;
+
+  color: #fff;
+
+  backdrop-filter: blur(15px);
+  pointer-events: all;
+}
+
+.jackpot > div:first-child {
+  padding-left: 6px;
+}
+
+.jackpot > div:first-child > div:first-child {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.jackpot > div:first-child > div:first-child > span {
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+}
+
+.jackpot > div:first-child > div:first-child > img {
+  width: 24px;
+  height: 24px;
+}
+
+.jackpot > div:first-child > div:last-child {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.jackpot > div:last-child {
+  position: relative;
+  height: 70px;
+}
+
+.jackpot > div:last-child > div {
+  background: rgba(249, 42, 77, 1);
+
+  padding: 5px;
+  border-radius: 5px;
+
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.jackpot > div:last-child > img {
+  height: 100%;
+}
