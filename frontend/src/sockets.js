@@ -6,7 +6,6 @@ const SocketContext = createContext();
 
 const SocketProvider = ({ children }) => {
 
-  alert(JSON.stringify(process.env));
   const [ loading, setLoading ] = useState(false);
   const [ socket, setSocket ] = useState(null);
   const [ accessToken, setAccessToken ] = useState(localStorage.getItem('accessToken'));
@@ -29,7 +28,7 @@ const SocketProvider = ({ children }) => {
   const [ gameResult, setGameResult ] = useState([1, 1, 1])
 
   const createSocket = (token) => {
-    setSocket(io(process.env.FLASK_ENDPOINT, {
+    setSocket(io(`ws://51.75.76.168:5000`, {
       transportOptions: {
         polling: {
           maxHttpBufferSize: 1e8,
@@ -43,7 +42,7 @@ const SocketProvider = ({ children }) => {
 
   const login = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.FLASK_ENDPOINT}/login`, data);
+      const response = await axios.post(`http://51.75.76.168:5000/login`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -70,7 +69,7 @@ const SocketProvider = ({ children }) => {
 
   const signup = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.FLASK_ENDPOINT}/signup`, data);
+      const response = await axios.post(`http://51.75.76.168:5000/signup`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -89,7 +88,7 @@ const SocketProvider = ({ children }) => {
 
   const verify = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.FLASK_ENDPOINT}/verify`, data);
+      const response = await axios.post(`http://51.75.76.168:5000/verify`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -125,7 +124,7 @@ const SocketProvider = ({ children }) => {
 
   const resendCode = async (data) => {
     try {
-      const response = await axios.post(`${process.env.FLASK_ENDPOINT}/resend-code`, data);
+      const response = await axios.post(`http://51.75.76.168:5000/resend-code`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -138,7 +137,7 @@ const SocketProvider = ({ children }) => {
 
   const refreshAccessToken = async () => {
     try {
-      const response = await axios.post(`${process.env.FLASK_ENDPOINT}/refresh`, null, {
+      const response = await axios.post(`http://51.75.76.168:5000/refresh`, null, {
         headers: {
           Authorization: "Bearer " + refreshToken
         }
