@@ -20,3 +20,5 @@ dist/
 *.temp
 
 .env.*.local
+
+__pycache__/
