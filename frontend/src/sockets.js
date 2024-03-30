@@ -27,7 +27,7 @@ const SocketProvider = ({ children }) => {
   const [ gameResult, setGameResult ] = useState([1, 1, 1])
 
   const createSocket = (token) => {
-    setSocket(io(`ws://172.20.10.2:5000`, {
+    setSocket(io(process.env.FLASK_ENDPOINT, {
       transportOptions: {
         polling: {
           maxHttpBufferSize: 1e8,
