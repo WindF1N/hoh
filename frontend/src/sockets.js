@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const SocketContext = createContext();
 
+require('dotenv').config();
+
 const SocketProvider = ({ children }) => {
   const [ loading, setLoading ] = useState(false);
   const [ socket, setSocket ] = useState(null);
