@@ -3,8 +3,6 @@
 # Загружаем переменные из .env файла
 export $(grep -v '^#' .env | xargs)
 
-echo "FLASK_ENDPOINT: $FLASK_ENDPOINT"
-
 # Проверяем значение START_MODE
 if [ "$START_MODE" = "dev" ]; then
     # Запускаем контейнеры в режиме разработки, включая db
