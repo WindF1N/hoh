@@ -4,9 +4,9 @@ import axios from 'axios';
 
 const SocketContext = createContext();
 
-require('dotenv').config();
-
 const SocketProvider = ({ children }) => {
+
+  alert(JSON.stringify(process.env));
   const [ loading, setLoading ] = useState(false);
   const [ socket, setSocket ] = useState(null);
   const [ accessToken, setAccessToken ] = useState(localStorage.getItem('accessToken'));
