@@ -10,6 +10,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    environment:
+      - FLASK_ENDPOINT=${FLASK_ENDPOINT}
 
   backend:
     build:
