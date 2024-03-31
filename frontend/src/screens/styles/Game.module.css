@@ -2,7 +2,6 @@
   width: 100%;
   min-height: 100vh;
 
-  background-image: url("../images/bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -125,6 +124,8 @@
   gap: 5vh;
 
   margin-top: auto;
+
+  z-index: 1;
 }
 
 /* modals */
@@ -379,3 +380,24 @@
 .boostButton {
   padding: 0 10px 30px 10px;
 }
+
+.bgVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 0;
+}
+
+.bgVideoHidden {
+  display: none;
+}
+
+.bgVideo > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+

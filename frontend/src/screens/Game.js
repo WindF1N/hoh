@@ -89,9 +89,9 @@ function Game() {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
+      const nowUtc = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
       const targetDate = new Date(generationEnergy.end.replace(' ', 'T'));
-      console.log(now.toUTCString(), targetDate);
-      const diff = targetDate - now;
+      const diff = targetDate - nowUtc;
 
       if (diff < 0) {
         setTimeLeft('00:00');
@@ -119,7 +119,17 @@ function Game() {
 
   return (
     <>
-      <div className={styles.main} style={gamePhase ? {backgroundImage: 'url("bg-game.jpg")'} : (generationEnergy ? {backgroundImage: 'url("bg-generation.gif")'} : null)}>
+      <div className={styles.main} style={{backgroundImage: 'url("bg.png")'}}>
+        <div class={gamePhase ? styles.bgVideoHidden : (generationEnergy ? styles.bgVideo : styles.bgVideoHidden)}>       
+          <video preload="auto" muted playsInline autoPlay loop>
+              <source src="bg-generation.mp4" type="video/mp4" />
+          </video>       
+        </div>
+        <div class={gamePhase ? styles.bgVideo : styles.bgVideoHidden}>       
+          <video preload="auto" muted playsInline autoPlay loop>
+              <source src="bg-game.mp4" type="video/mp4" />
+          </video>       
+        </div>
         <Header />
         {!gamePhase &&
           <>
