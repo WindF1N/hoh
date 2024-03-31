@@ -14,42 +14,19 @@ from base64 import b64decode
 from jwt import ExpiredSignatureError
 from datetime import timedelta, datetime
 import uuid
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
+from utils import generate_verification_code, prepare_data_for_client, prepare_data_for_db
+from mail import send_email
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/hoh')
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 16 megabytes
-app.config["JWT_SECRET_KEY"] = base64.b64encode(os.urandom(32)).decode('utf-8')
+app.config["JWT_SECRET_KEY"] = "super-secret" # base64.b64encode(os.urandom(32)).decode('utf-8')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=60)
 CORS(app, resources={r"/*": {"origins": "*"}})
 mongo = PyMongo(app)
 socketio = SocketIO(app, cors_allowed_origins="*", max_http_buffer_size=1024 * 1024 * 1024)
 jwt = JWTManager(app)
-
-def send_email(to, subject, message):
-    msg = MIMEMultipart()
-    msg['From'] = 'agafonov.egorushka@gmail.com'
-    msg['To'] = to
-    msg['Subject'] = subject
-    msg.attach(MIMEText(message))
-
-    mailserver = smtplib.SMTP('smtp.gmail.com', 587)
-    mailserver.ehlo()
-    mailserver.starttls()
-    mailserver.ehlo()
-    mailserver.login('agafonov.egorushka@gmail.com', 'tnqj nlsw dmtg kejl')
-    mailserver.sendmail('agafonov.egorushka@gmail.com', to, msg.as_string())
-    mailserver.quit()
-
-def generate_verification_code():
-    return ''.join(str(random.randint(0, 9)) for _ in range(6))
-
-def prepare_data(data):
-    return {k: v if not isinstance(v, (ObjectId, datetime)) else str(v) if isinstance(v, ObjectId) else v.strftime('%Y-%m-%d %H:%M:%S') for k, v in data.items()}
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -186,13 +163,14 @@ def handle_disconnect():
 @socketio.on('message')
 @jwt_required()
 def handle_message(message):
-    current_user = get_jwt_identity()
-    user = mongo.db.users.find_one({"email": current_user})
     message = json.loads(message)
     print(message)
+    current_user = get_jwt_identity()
+    user = mongo.db.users.find_one({"email": current_user})
     if message[0] == 'user':
         if message[1] == 'get':
-            emit('message', json.dumps([message[0], message[1], prepare_data(user)]))
+            print(prepare_data_for_client(user))
+            emit('message', json.dumps([message[0], message[1], prepare_data_for_client(user)]))
         elif message[1] == 'add_wallet':
             if "wallet_verified" in user:
                 if user["wallet_verified"]:
@@ -211,7 +189,7 @@ def handle_message(message):
         if message[1] == 'get':
             energy = mongo.db.energies.find_one({"user_id": user["_id"]})
             if energy:
-                emit('message', json.dumps([message[0], message[1], prepare_data(energy)]))
+                emit('message', json.dumps([message[0], message[1], prepare_data_for_client(energy)]))
             else:
                 energy_id = mongo.db.energies.insert_one({
                     "user_id": user["_id"],
@@ -219,7 +197,7 @@ def handle_message(message):
                     "value": 3,
                     "minutes": 12
                 }).inserted_id
-                emit('message', json.dumps([message[0], message[1], prepare_data({
+                emit('message', json.dumps([message[0], message[1], prepare_data_for_client({
                     "_id": energy_id,
                     "user_id": user["_id"],
                     "limit": 3,
@@ -238,9 +216,9 @@ def handle_message(message):
                             mongo.db.energies.update_one({"_id": energy["_id"]}, {"$set": {"value": energy["value"] + 1}})
                         emit('message', json.dumps([message[0], message[1], message[2], None]))
                         energy = mongo.db.energies.find_one({"_id": energy["_id"]})
-                        emit('message', json.dumps(["energy", "get", prepare_data(energy)]))
+                        emit('message', json.dumps(["energy", "get", prepare_data_for_client(energy)]))
                     else:
-                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data(generation)]))
+                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data_for_client(generation)]))
                 else:
                     emit('message', json.dumps([message[0], message[1], message[2], None]))
         elif message[1] == 'add':
@@ -259,16 +237,16 @@ def handle_message(message):
                             "status": "pending",
                             "created_at": now
                         }).inserted_id
-                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data({
+                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data_for_client({
                             "_id": generation_id,
                             "end": now + timedelta(minutes=energy["minutes"]),
                             "status": "pending",
                             "created_at": now
                         })]))
                         energy = mongo.db.energies.find_one({"_id": energy["_id"]})
-                        emit('message', json.dumps(["energy", "get", prepare_data(energy)]))
+                        emit('message', json.dumps(["energy", "get", prepare_data_for_client(energy)]))
                     else:
-                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data(generation)]))
+                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data_for_client(generation)]))
                 else:
                     if energy["value"] < energy["limit"]:
                         now = datetime.now()
@@ -278,7 +256,7 @@ def handle_message(message):
                             "status": "pending",
                             "created_at": now
                         }).inserted_id
-                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data({
+                        emit('message', json.dumps([message[0], message[1], message[2], prepare_data_for_client({
                             "_id": generation_id,
                             "end": now + timedelta(minutes=energy["minutes"]),
                             "status": "pending",
@@ -295,7 +273,7 @@ def handle_message(message):
                         mongo.db.energies.update_one({"_id": energy["_id"]}, {"$set": {"minutes": energy["minutes"] - 1}})
                         emit('message', json.dumps([message[0], message[1], message[2], balance - (100 + 100 * (12 - energy["minutes"]))]))
                         energy = mongo.db.energies.find_one({"_id": energy["_id"]})
-                        emit('message', json.dumps(["energy", "get", prepare_data(energy)]))
+                        emit('message', json.dumps(["energy", "get", prepare_data_for_client(energy)]))
             elif message[1] == 2:
                 if energy["limit"] < 10:
                     if user["balance"] >= 100 + 100 * (energy["limit"] - 3):
@@ -303,7 +281,7 @@ def handle_message(message):
                         mongo.db.energies.update_one({"_id": energy["_id"]}, {"$set": {"limit": energy["limit"] + 1}})
                         emit('message', json.dumps([message[0], message[1], message[2], balance - (100 + 100 * (energy["limit"] - 3))]))
                         energy = mongo.db.energies.find_one({"_id": energy["_id"]})
-                        emit('message', json.dumps(["energy", "get", prepare_data(energy)]))
+                        emit('message', json.dumps(["energy", "get", prepare_data_for_client(energy)]))
 
     elif message[0] == 'game':
         energy = mongo.db.energies.find_one({"_id": ObjectId(message[1])})
