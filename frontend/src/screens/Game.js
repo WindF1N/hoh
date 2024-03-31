@@ -90,6 +90,7 @@ function Game() {
     const calculateTimeLeft = () => {
       const now = new Date();
       const targetDate = new Date(generationEnergy.end.replace(' ', 'T'));
+      console.log(now.toUTCString(), targetDate);
       const diff = targetDate - now;
 
       if (diff < 0) {

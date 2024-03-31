@@ -11,7 +11,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - FLASK_ENDPOINT=${FLASK_ENDPOINT}
+      - REACT_APP_FLASK_ENDPOINT=${REACT_APP_FLASK_ENDPOINT}
 
   backend:
     build:
