@@ -245,7 +245,7 @@ const SocketProvider = ({ children }) => {
           setGenerationEneregy(message[3]);
         }
       } else if (message[0] === 'boost') {
-        setAccount(prevState => ({...prevState, balance: message[4], game_balance: message[5]}));
+        setAccount(prevState => ({...prevState, game_balance: message[4]}));
       } else if (message[0] === 'game') {
         setGameResult(message[3]);
         setAccount(prevState => ({...prevState, balance: message[4], game_balance: message[5]}));

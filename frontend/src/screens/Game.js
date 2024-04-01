@@ -279,7 +279,7 @@ function Game() {
                 </div>}
             {energy?.minutes > 5 &&
               <div className={styles.boostButton}>
-                <Button text="GET" onClick={() => handleBoost(1)} style={account.game_balance >= 100 + 100 * (12 - (energy.minutes || 12)) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
+                <Button text="GET" onClick={() => handleBoost(1)} style={account?.game_balance >= 100 + 100 * (12 - (energy?.minutes || 12)) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
               </div>}
           </Modal>}
         {modal === 'boosts-2' &&
@@ -308,7 +308,7 @@ function Game() {
               </div>}
             {energy?.limit < 10 &&
             <div className={styles.boostButton}>
-              <Button text="GET" onClick={() => handleBoost(2)} style={account.game_balance >= 100 + 100 * (12 - (energy.minutes || 12)) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
+              <Button text="GET" onClick={() => handleBoost(2)} style={account?.game_balance >= 100 + 100 * ((energy?.limit || 3) - 3) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
             </div>}
           </Modal>}
         {modal === 'tasks' &&
