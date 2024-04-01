@@ -27,7 +27,7 @@ const SocketProvider = ({ children }) => {
   const [ gameResult, setGameResult ] = useState([1, 1, 1])
 
   const createSocket = (token) => {
-    setSocket(io(process.env.REACT_APP_FLASK_ENDPOINT, {
+    setSocket(io(process.env.REACT_APP_FLASK_ENDPOINT.replace("http", "ws"), {
       transportOptions: {
         polling: {
           maxHttpBufferSize: 1e8,
@@ -245,10 +245,10 @@ const SocketProvider = ({ children }) => {
           setGenerationEneregy(message[3]);
         }
       } else if (message[0] === 'boost') {
-        setAccount(prevState => ({...prevState, balance: message[3]}));
+        setAccount(prevState => ({...prevState, balance: message[4], game_balance: message[5]}));
       } else if (message[0] === 'game') {
         setGameResult(message[3]);
-        setAccount(prevState => ({...prevState, balance: message[4]}));
+        setAccount(prevState => ({...prevState, balance: message[4], game_balance: message[5]}));
       } else if (message[0] === 'error') {
         if (message[1] === 'Token has expired') {
           handleRefresh();

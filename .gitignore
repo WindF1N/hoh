@@ -21,4 +21,5 @@ dist/
 
 .env.*.local
 
+venv/
 __pycache__/

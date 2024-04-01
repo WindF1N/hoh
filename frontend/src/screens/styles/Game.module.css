@@ -291,6 +291,7 @@
 
 .boostsItemPrice img {
   width: 16px;
+  transform: scale(1.225);
 }
 
 .boostsArrow {
@@ -359,6 +360,7 @@
 
 .boostPriceLevel img {
   width: 22px;
+  transform: scale(1.225);
 }
 
 .boostPriceLevel b {

@@ -16,6 +16,10 @@ function Header() {
         </div>
         <div className={styles.wallet}>
           <div>
+            <img src={require("./images/HAMC.svg").default} alt="" />
+            <span>{account?.game_balance || 0 }</span>
+          </div>
+          <div>
             <img src={require("./images/HAMC2.svg").default} alt="" />
             <span>{account?.balance || 0 }</span>
           </div>

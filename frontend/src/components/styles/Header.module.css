@@ -53,6 +53,10 @@
   padding: 10px 0 10px 12.5px;
 }
 
+.wallet > div:first-child img {
+  transform: scale(1.23);
+}
+
 .wallet > div:last-child {
   background: rgba(255, 255, 255, 0.1);
   width: 45px;

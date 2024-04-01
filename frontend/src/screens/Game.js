@@ -24,7 +24,8 @@ function Game() {
           setGenerationEneregy,
           sendMessage,
           gameResult,
-          setGameResult } = useSocket();
+          setGameResult,
+          account } = useSocket();
 
   const [ gamePhase, setGamePhase ] = useState(null);
   const [ isFlipped, setIsFlipped ] = useState([false, false, false]);
@@ -56,11 +57,11 @@ function Game() {
     if (energy) {
       if (i === 1) {
         if (energy.minutes > 5) {
-          sendMessage(JSON.stringify(["boost", i, energy._id]));
+          sendMessage(JSON.stringify(["boost", "minutes:-1", energy._id]));
         }
       } else if (i === 2) {
         if (energy.limit < 10) {
-          sendMessage(JSON.stringify(["boost", i, energy._id]));
+          sendMessage(JSON.stringify(["boost", "limit:+1", energy._id]));
         }
       }
     }
@@ -89,7 +90,7 @@ function Game() {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const nowUtc = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+      const nowUtc = new Date( now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds() );
       const targetDate = new Date(generationEnergy.end.replace(' ', 'T'));
       const diff = targetDate - nowUtc;
 
@@ -109,6 +110,7 @@ function Game() {
       setTimeLeft(`${formattedMinutes}:${formattedSeconds}`);
     };
     if (generationEnergy) {
+      console.log(generationEnergy)
       calculateTimeLeft();
       const intervalId = setInterval(calculateTimeLeft, 1000);
       return () => {
@@ -120,12 +122,12 @@ function Game() {
   return (
     <>
       <div className={styles.main} style={{backgroundImage: 'url("bg.png")'}}>
-        <div class={gamePhase ? styles.bgVideoHidden : (generationEnergy ? styles.bgVideo : styles.bgVideoHidden)}>       
+        <div className={gamePhase ? styles.bgVideoHidden : (generationEnergy ? styles.bgVideo : styles.bgVideoHidden)}>       
           <video preload="auto" muted playsInline autoPlay loop>
               <source src="bg-generation.mp4" type="video/mp4" />
           </video>       
         </div>
-        <div class={gamePhase ? styles.bgVideo : styles.bgVideoHidden}>       
+        <div className={gamePhase ? styles.bgVideo : styles.bgVideoHidden}>       
           <video preload="auto" muted playsInline autoPlay loop>
               <source src="bg-game.mp4" type="video/mp4" />
           </video>       
@@ -210,7 +212,7 @@ function Game() {
           <Modal onClose={() => setModal(null)}>
             <div className={styles.boosts}>
               <div className={styles.boostsTitle}>
-                <img src={require("./images/book.svg").default} alt="" />
+                <img src={require("../components/images/shield-up-line-duotone.svg").default} alt="" />
                 <span>Boosts</span>
               </div>
               <div className={styles.boostsList}>
@@ -223,7 +225,7 @@ function Game() {
                     <div className={styles.boostsItemDescription}>-1 минута на добычу энергии</div>
                     {energy?.minutes > 5 &&
                       <div className={styles.boostsItemPrice}>
-                        <img src={require("../components/images/HAMC2.svg").default} alt="" />
+                        <img src={require("../components/images/HAMC.svg").default} alt="" />
                         <span>{ 100 + 100 * (12 - (energy?.minutes || 12)) }</span>
                       </div>}
                   </div>
@@ -240,7 +242,7 @@ function Game() {
                     <div className={styles.boostsItemDescription}>+1  ячейка энергии для игры</div>
                     {energy?.limit < 10 &&
                       <div className={styles.boostsItemPrice}>
-                        <img src={require("../components/images/HAMC2.svg").default} alt="" />
+                        <img src={require("../components/images/HAMC.svg").default} alt="" />
                         <span>{ 100 + 100 * ((energy?.limit || 3) - 3) }</span>
                       </div>}
                   </div>
@@ -267,7 +269,7 @@ function Game() {
             </div>
             {energy?.minutes > 5 ?
                 <div className={styles.boostPriceLevel}>
-                  <img src={require("../components/images/HAMC2.svg").default} alt="" />
+                  <img src={require("../components/images/HAMC.svg").default} alt="" />
                   <b>{ 100 + 100 * (12 - (energy?.minutes || 12)) }</b>
                   <span>/ Level {12 - (energy?.minutes || 12)}</span>
                 </div>
@@ -277,7 +279,7 @@ function Game() {
                 </div>}
             {energy?.minutes > 5 &&
               <div className={styles.boostButton}>
-                <Button text="GET" onClick={() => handleBoost(1)} style={{ fontWeight: "500" }} />
+                <Button text="GET" onClick={() => handleBoost(1)} style={account.game_balance >= 100 + 100 * (12 - (energy.minutes || 12)) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
               </div>}
           </Modal>}
         {modal === 'boosts-2' &&
@@ -296,7 +298,7 @@ function Game() {
             </div>
             {energy?.limit < 10 ?
               <div className={styles.boostPriceLevel}>
-                <img src={require("../components/images/HAMC2.svg").default} alt="" />
+                <img src={require("../components/images/HAMC.svg").default} alt="" />
                 <b>{ 100 + 100 * ((energy?.limit || 3) - 3) }</b>
                 <span>/ Level {(energy?.limit || 3) - 3}</span>
               </div>
@@ -306,16 +308,26 @@ function Game() {
               </div>}
             {energy?.limit < 10 &&
             <div className={styles.boostButton}>
-              <Button text="GET" onClick={() => handleBoost(2)} style={{ fontWeight: "500" }} />
+              <Button text="GET" onClick={() => handleBoost(2)} style={account.game_balance >= 100 + 100 * (12 - (energy.minutes || 12)) ? { fontWeight: "500" } : { fontWeight: "500", color: "4F4F4F", backgroundColor: "#202020", border: 0 }} />
             </div>}
           </Modal>}
         {modal === 'tasks' &&
           <Modal onClose={() => setModal(null)}>
-
+            <div className={styles.boosts}>
+              <div className={styles.boostsTitle}>
+                <img src={require("./images/book.svg").default} alt="" />
+                <span>Tasks</span>
+              </div>
+            </div>
           </Modal>}
         {modal === 'leaders' &&
           <Modal onClose={() => setModal(null)}>
-
+            <div className={styles.boosts}>
+              <div className={styles.boostsTitle}>
+                <img src={require("../components/images/cup-star-line-duotone.svg").default} alt="" />
+                <span>Leaderboard</span>
+              </div>
+            </div>
           </Modal>}
         <MenuBar />
       </div>
