@@ -1,0 +1,140 @@
+.main {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.block {
+    padding: 24px;
+    background-color: #18181A;
+    border-radius: 20px;
+    border: 1px solid #3B3B3B;
+    margin-top: 20px;
+
+    display: flex;
+    flex-flow: column;
+    gap: 24px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #3B3B3B;
+}
+
+.title > div:nth-child(1) {
+    font-size: 32px;
+    letter-spacing: -2px;
+    line-height: 42px;
+    color: #fff;
+}
+
+.title > div:nth-child(2) {
+    font-size: var(--font16px);
+    line-height: 22px;
+    color: var(--main-color);
+
+    padding: 4px 10px;
+    background: #9DFF1226;
+    border-radius: 300px;
+    border: 0.39px solid #FFFFFF1A;
+    box-shadow: 0px 0px 10.908533096313477px 0px #A6FF3E29;
+}
+
+.text {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -.2px;
+}
+
+.text > span {
+    color: #9DFF12
+}
+
+.textCenter {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -.2px;
+    text-align: center;
+}
+
+.textCenter > span {
+    color: #9DFF12
+}
+
+.input {
+    background-color: var(--main-bg-color);
+    border: 1px solid #4f4f4f;
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 9px 14px;
+}
+
+.input > div:first-child {
+    display: flex;
+    flex-flow: column;
+}
+
+.input > div:first-child > span:first-child {
+    font-size: 10px;
+    line-height: 12px;
+    color: #999;
+}
+
+.input > div:first-child > span:last-child {
+    font-size: var(--font14px);
+    line-height: 20px;
+    letter-spacing: -.2px;
+    color: #fff;
+}
+
+.input > div:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input > div:last-child > img {
+    width: 24px;
+    height: 24px;
+}
+
+.items {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item > div:first-child {
+    font-size: var(--font14px);
+    line-height: 20px;
+    color: #ccc;
+    letter-spacing: -.2px;
+}
+
+.item > div:last-child {
+    font-size: var(--font16px);
+    line-height: 22px;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    gap: 5px
+}

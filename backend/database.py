@@ -84,22 +84,20 @@ class Generation:
     def __init__(self, mongo):
         self.mongo = mongo
 
-    def create(self, energy_id, end, created_at):
+    def create(self, energy_id, end_at, created_at):
         return prepare_data_for_client(
             self.mongo.db.generations.insert_one(
                 prepare_data_for_db({
                     "energy_id": energy_id,
-                    "end": end,
-                    "created_at": created_at
+                    "end_at": end_at,
+                    "created_at": created_at,
+                    "ended": False
                 })
             ).inserted_id
         )
 
     def update(self, id, data):
         self.mongo.db.generations.update_one({"_id": prepare_data_for_db(id)}, data)
-
-    def remove(self, data):
-        self.mongo.db.generations.delete_many(prepare_data_for_db(data))
 
     def get(self, data):
         return prepare_data_for_client(

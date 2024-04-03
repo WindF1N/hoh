@@ -11,7 +11,7 @@
   margin: 0;
   text-align: center;
   font-weight: 400;
-  font-size: 4vh;
+  font-size: 32px;
   letter-spacing: -2px;
   color: #fff;
 
@@ -64,4 +64,74 @@
   bottom: 20px;
   width: calc(100% - 20px);
   max-width: 500px;
+}
+
+.user {
+  padding: 24px;
+  background-color: #18181A;
+  border-radius: 20px;
+  border: 1px solid #3B3B3B;
+  margin-top: 20px;
+
+  display: flex;
+  flex-flow: column;
+  gap: 24px;
+}
+
+.avatar {
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.data {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.data > div:last-child {
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+}
+
+.username {
+  font-size: var(--font20px);
+  color: #fff;
+}
+
+.stats {
+  display: flex;
+  justify-self: flex-start;
+  gap: 4px
+}
+
+.stats > div {
+  font-size: var(--font16px);
+  line-height: 22px;
+  color: var(--main-color);
+
+  padding: 4px 10px;
+  background: #9DFF1226;
+  border-radius: 300px;
+  border: 0.39px solid #FFFFFF1A;
+  box-shadow: 0px 0px 10.908533096313477px 0px #A6FF3E29;
+}
+
+.block {
+  padding: 16px 0;
+  border-bottom: 1px solid #3B3B3B;
+}
+
+.block:nth-child(3) {
+  border-bottom: 0;
 }

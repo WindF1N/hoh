@@ -11,8 +11,11 @@ import { useSocket } from '../sockets';
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Некорректный email')
+    .max(100, 'Имя пользователя содержит больше 100 символов')
     .required('Обязательное поле'),
   username: Yup.string()
+    .matches(/^[a-zA-Z0-9._]*$/, 'Имя пользователя может содержать только латиницу, нижние пробелы и точки')
+    .max(30, 'Имя пользователя содержит больше 30 символов')
     .required('Обязательное поле'),
   password: Yup.string()
     .min(8, 'Пароль должен быть не короче 8 символов')

@@ -41,14 +41,12 @@ function Game() {
 
   const handleClick = (index) => {
     if (gamePhase === "started") {
-      if (energy) {
-        if (energy.value > 0) {
-          setIsFlipped([true, true, true]);
-          setSelectedCardIndex(index);
-          setGamePhase("ended");
-          setEnergy(prevEnergy => ({...prevEnergy, value: prevEnergy.value - 1}));
-          sendMessage(JSON.stringify(["game", energy._id, index]));
-        }
+      if (energy?.value > 0) {
+        setIsFlipped([true, true, true]);
+        setSelectedCardIndex(index);
+        setGamePhase("ended");
+        setEnergy(prevEnergy => ({...prevEnergy, value: prevEnergy.value - 1}));
+        sendMessage(JSON.stringify(["game", energy._id, index]));
       }
     }
   };
@@ -91,7 +89,7 @@ function Game() {
     const calculateTimeLeft = () => {
       const now = new Date();
       const nowUtc = new Date( now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds() );
-      const targetDate = new Date(generationEnergy.end.replace(' ', 'T'));
+      const targetDate = new Date(generationEnergy.end_at.replace(' ', 'T'));
       const diff = targetDate - nowUtc;
 
       if (diff < 0) {
@@ -110,7 +108,6 @@ function Game() {
       setTimeLeft(`${formattedMinutes}:${formattedSeconds}`);
     };
     if (generationEnergy) {
-      console.log(generationEnergy)
       calculateTimeLeft();
       const intervalId = setInterval(calculateTimeLeft, 1000);
       return () => {

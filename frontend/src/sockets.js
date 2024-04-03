@@ -182,9 +182,6 @@ const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (socket) {
       socket.on('connect', () => {
-        sendMessage(JSON.stringify(["user", "get"]));
-        sendMessage(JSON.stringify(["energy", "get"]));
-        setLoading(true);
         console.log('Подключились к серверу');
       });
 
@@ -227,16 +224,21 @@ const SocketProvider = ({ children }) => {
     if (message) {
       if (message[0] === 'user') {
         if (message[1] === 'get') {
-          setAccount(message[2]);
-          if (message[2].wallet_verified) {
-            setPublicKey(message[2].wallet);
-            localStorage.setItem('publicKey', message[2].wallet);
+          if (message[2]) {
+            setAccount(message[2]);
+            if (message[2].wallet_verified) {
+              setPublicKey(message[2].wallet);
+              localStorage.setItem('publicKey', message[2].wallet);
+            }
+          } else {
+            logout();
           }
         };
       } else if (message[0] === 'energy') {
         if (message[1] === 'get') {
           setEnergy(message[2]);
           sendMessage(JSON.stringify(["generation", "get", message[2]._id]));
+          setLoading(false);
         }
       } else if (message[0] === 'generation') {
         if (message[1] === 'get') {
@@ -245,10 +247,10 @@ const SocketProvider = ({ children }) => {
           setGenerationEneregy(message[3]);
         }
       } else if (message[0] === 'boost') {
-        setAccount(prevState => ({...prevState, game_balance: message[4]}));
+        setAccount(prevState => ({...prevState, game_balance: message[3]}));
       } else if (message[0] === 'game') {
         setGameResult(message[3]);
-        setAccount(prevState => ({...prevState, balance: message[4], game_balance: message[5]}));
+        setAccount(prevState => ({...prevState, game_balance: message[4], balance: message[5]}));
       } else if (message[0] === 'error') {
         if (message[1] === 'Token has expired') {
           handleRefresh();
@@ -257,6 +259,18 @@ const SocketProvider = ({ children }) => {
       setMessage(null);
     };
   }, [message]);
+
+  useEffect(() => {
+    if (socket && !account) {
+      sendMessage(JSON.stringify(["user", "get"]));
+    }
+  }, [socket, account])
+
+  useEffect(() => {
+    if (socket && !energy) {
+      sendMessage(JSON.stringify(["energy", "get"]));
+    }
+  }, [socket, energy])
 
   return (
     <SocketContext.Provider value={{ sendMessage,

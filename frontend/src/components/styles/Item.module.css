@@ -1,0 +1,28 @@
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+}
+
+.left, .right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.left img, .right img {
+    width: 24px;
+    height: 24px;
+}
+
+.left span, .right span {
+    color: #fff;
+    font-size: var(--font16px);
+    line-height: 20px;
+    letter-spacing: -.2px;
+}
+
+.right span {
+    color: #999;
+}

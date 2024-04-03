@@ -1,0 +1,55 @@
+.main {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.block {
+  padding: 16px 0;
+  border-bottom: 1px solid #3B3B3B;
+}
+
+.block:nth-child(3) {
+  border-bottom: 0;
+}
+
+.userAvatar {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  padding-top: 32px;
+  padding-bottom: 16px;
+
+  gap: 16px;
+}
+
+.avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+
+  padding: 5px;
+  border: 1px solid #414142;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+}
+
+.userAvatar > div:last-child {
+  color: #999999;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -.2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

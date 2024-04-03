@@ -18,15 +18,15 @@
 }
 
 .modal {
+  max-width: 500px;
   width: 95%;
   border-radius: 15px;
-  overflow: hidden;
   min-height: 20px;
   background: #000;
 
   display: flex;
   flex-flow: column;
-
+  position: relative
 }
 
 .closeModal {
