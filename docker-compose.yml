@@ -23,6 +23,7 @@ services:
       - ./backend:/app
     environment:
       - MONGODB_URI=${MONGODB_URI}
+      - FLASK_STATIC_FOLDER=${FLASK_STATIC_FOLDER}
 
   db:
     image: mongo:4.2
