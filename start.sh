@@ -10,7 +10,7 @@ if [ "$START_MODE" = "dev" ]; then
 elif [ "$START_MODE" = "prod" ]; then
     # Запускаем контейнеры в режиме продакшена, не включая db
     # Используем переменную окружения для MONGODB_URI
-    MONGODB_URI=$MONGODB_URI REACT_APP_FLASK_ENDPOINT=$REACT_APP_FLASK_ENDPOINT docker-compose up --build --scale db=0
+    MONGODB_URI=$MONGODB_URI REACT_APP_FLASK_ENDPOINT=$REACT_APP_FLASK_ENDPOINT docker-compose up -d --build --scale db=0
 else
     echo "Неизвестный режим START_MODE: $START_MODE"
     exit 1
