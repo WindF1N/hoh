@@ -16,7 +16,7 @@ COPY . .
 # Экспортируем порт 5000 для Flask
 EXPOSE 5000
 
-RUN ls
+RUN pwd
 
 # Запускаем Flask приложение с параметрами --debug, --host=0.0.0.0 и --port=5000
 CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
