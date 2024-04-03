@@ -14,7 +14,7 @@ from utils import generate_verification_code, prepare_data_for_client, prepare_d
 from mail import send_email
 from database import Database
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.getenv('FLASK_STATIC_FOLDER', None))
 app.config["MONGO_URI"] = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/hoh')
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 16 megabytes
 app.config["JWT_SECRET_KEY"] = "super-secret" # base64.b64encode(os.urandom(32)).decode('utf-8')
