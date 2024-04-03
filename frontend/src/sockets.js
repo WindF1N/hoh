@@ -27,7 +27,7 @@ const SocketProvider = ({ children }) => {
   const [ gameResult, setGameResult ] = useState([1, 1, 1])
 
   const createSocket = (token) => {
-    setSocket(io(process.env.REACT_APP_FLASK_ENDPOINT.replace("http", "ws"), {
+    setSocket(io("wss://app.hoh.game", {
       transportOptions: {
         polling: {
           maxHttpBufferSize: 1e8,
@@ -41,7 +41,7 @@ const SocketProvider = ({ children }) => {
 
   const login = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_FLASK_ENDPOINT}/login`, data);
+      const response = await axios.post(`/login`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -68,7 +68,7 @@ const SocketProvider = ({ children }) => {
 
   const signup = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_FLASK_ENDPOINT}/signup`, data);
+      const response = await axios.post(`/signup`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -87,7 +87,7 @@ const SocketProvider = ({ children }) => {
 
   const verify = async (data, navigate) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_FLASK_ENDPOINT}/verify`, data);
+      const response = await axios.post(`/verify`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -123,7 +123,7 @@ const SocketProvider = ({ children }) => {
 
   const resendCode = async (data) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_FLASK_ENDPOINT}/resend-code`, data);
+      const response = await axios.post(`/resend-code`, data);
       if ('error' in response.data) {
         alert(response.data.error);
         setError(response.data.error);
@@ -136,7 +136,7 @@ const SocketProvider = ({ children }) => {
 
   const refreshAccessToken = async () => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_FLASK_ENDPOINT}/refresh`, null, {
+      const response = await axios.post(`/refresh`, null, {
         headers: {
           Authorization: "Bearer " + refreshToken
         }

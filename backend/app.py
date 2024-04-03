@@ -15,12 +15,11 @@ from mail import send_email
 from database import Database
 
 app = Flask(__name__, static_folder=os.getenv('FLASK_STATIC_FOLDER', None))
-app.config["MONGO_URI"] = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/hoh')
+app.config["MONGO_URI"] = os.getenv('MONGODB_URI', None)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 16 megabytes
-app.config["JWT_SECRET_KEY"] = "super-secret" # base64.b64encode(os.urandom(32)).decode('utf-8')
+app.config["JWT_SECRET_KEY"] = base64.b64encode(os.urandom(32)).decode('utf-8')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=60)
-CORS(app, resources={r"/*": {"origins": "*"}})
 database = Database(app)
 socketio = SocketIO(app, cors_allowed_origins="*", max_http_buffer_size=1024 * 1024 * 1024)
 jwt = JWTManager(app)
