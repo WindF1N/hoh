@@ -355,7 +355,7 @@
   gap: 8px;
 
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 .boostPriceLevel img {
@@ -403,3 +403,133 @@
   object-fit: cover;
 }
 
+
+.leaders {
+  padding: 32px 12px;
+}
+
+.leadersTitle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.leadersTitle img {
+  width: 36px;
+}
+.leadersTitle span {
+  color: #fff;
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+}
+.leadersList {
+  margin-top: 20px;
+  display: flex;
+  flex-flow: column;
+
+  gap: 10px;
+  color: #fff;
+
+  padding: 0 0px;
+}
+.leader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  gap: 15px;
+}
+
+.leaderUsername {
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -.2px;
+}
+.leaderBalance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #ccc;
+
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -.2px;
+}
+
+.leaderBalance img {
+  width: 16px;
+  transform: scale(1.225);
+}
+
+.tasksIcon {
+  padding: 10px;
+  background-color: #282828;
+  display: flex;
+  border-radius: 10px;
+}
+
+.tasksIcon img {
+  width: 48px;
+}
+
+.taskList {
+  display: flex;
+  flex-flow: column;
+  gap: 15px;
+
+  padding: 0 15px 20px 15px;
+}
+
+.taskItem {
+  border: 1px solid #3B3B3B;
+  border-radius: 15px;
+  padding: 10px;
+  color: #fff;
+
+  display: flex;
+  flex-flow: column;
+  gap: 15px;
+}
+
+.taskItem > div:nth-child(1) {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.taskIcon {
+  padding: 10px;
+  background-color: #282828;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.taskIcon img {
+  width: 32px;
+}
+
+.taskItemTitle {
+  font-size: 18px;
+  letter-spacing: -.2px;
+}
+
+.taskItemDescription {
+  font-size: 12px;
+  color: #CCCCCC;
+}
+
+.taskDescription {
+  text-align: center;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -.2px;
+  color: #878787;
+
+  margin-top: 5px;
+}

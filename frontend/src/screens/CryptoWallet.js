@@ -42,10 +42,10 @@ function CryptoWallet() {
             You need to gain access to your wallet {publicKey}. You can enter seed phrases to restore your wallet
           </div>}
         {((!publicKey && !secretKey) || (!publicKey && secretKey)) &&
-        <>
+        <div>
           <ButtonHOH text="Create a new wallet" reverse={true} style={{marginTop: 24}} onClick={() => navigate('/seedphrase')}/>
           <ButtonHOH text="Import your wallet" onClick={() => navigate('/enterseedphrase')} style={(!publicKey && !secretKey) ? {marginTop: 16} : {marginTop: 24}}/>
-        </>}
+        </div>}
         {(publicKey && !secretKey) &&
           <ButtonHOH text="Recover your wallet" style={{marginTop: 24}} onClick={() => navigate('/enterseedphrase')}/>}
         <div className={styles.fixedBottom}>

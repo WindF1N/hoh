@@ -6,7 +6,7 @@ function Header() {
 
   const navigate = useNavigate();
 
-  const { setModal, account } = useSocket();
+  const { setModal, account, jackpot } = useSocket();
 
   return (
     <div className={styles.header}>
@@ -28,11 +28,12 @@ function Header() {
           </div>
         </div>
       </div>
+      {jackpot &&
       <div className={styles.jackpot} onClick={() => setModal("yt")}>
         <div>
           <div>
             <img src={require("./images/HAMC2.svg").default} alt="" />
-            <span>100 000 000</span>
+            <span>{jackpot.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}</span>
           </div>
           <div>
             JACKPOT
@@ -42,7 +43,7 @@ function Header() {
           <img src={require("./images/image.png")} alt="" />
           <div>LIVE</div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

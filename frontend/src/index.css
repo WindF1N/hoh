@@ -38,3 +38,7 @@ input:-webkit-autofill:active{
   margin: auto;
   position: relative;
 }
+
+a {
+  text-decoration: none;
+}

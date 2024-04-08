@@ -61,6 +61,13 @@
   box-sizing: border-box;
   position: fixed;
   bottom: 20px;
+  left: 0;
   width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.fixedBottom > * {
   max-width: 460px;
 }

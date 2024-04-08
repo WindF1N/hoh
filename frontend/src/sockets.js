@@ -24,7 +24,14 @@ const SocketProvider = ({ children }) => {
 
   const [ energy, setEnergy ] = useState(null);
   const [ generationEnergy, setGenerationEneregy ] = useState(null);
-  const [ gameResult, setGameResult ] = useState([1, 1, 1])
+  const [ gameResult, setGameResult ] = useState([1, 1, 1]);
+
+  const [ jackpot, setJackpot ] = useState();
+  const [ boosts, setBoosts ] = useState();
+  const [ settings, setSettings ] = useState();
+  const [ leaders, setLeaders ] = useState();
+  const [ partners, setPartners ] = useState();
+  const [ tasks, setTasks ] = useState([]);
 
   const createSocket = (token) => {
     setSocket(io(process.env.REACT_APP_FLASK_ENDPOINT.replace("http", "ws"), {
@@ -233,6 +240,9 @@ const SocketProvider = ({ children }) => {
           } else {
             logout();
           }
+        } else if (message[1] === 'leaders') {
+          console.log(JSON.stringify(message[2]));
+          setLeaders(message[2]);
         };
       } else if (message[0] === 'energy') {
         if (message[1] === 'get') {
@@ -247,10 +257,26 @@ const SocketProvider = ({ children }) => {
           setGenerationEneregy(message[3]);
         }
       } else if (message[0] === 'boost') {
-        setAccount(prevState => ({...prevState, game_balance: message[3]}));
+        if (message[1] === 'use') {
+          setAccount(prevState => ({...prevState, game_balance: message[3]}));
+        } else if (message[1] === 'get') {
+          setBoosts(message[2])
+        }
       } else if (message[0] === 'game') {
         setGameResult(message[3]);
         setAccount(prevState => ({...prevState, game_balance: message[4], balance: message[5]}));
+      } else if (message[0] === 'jackpot') {
+        setJackpot(message[2]);
+      } else if (message[0] === 'settings') {
+        setSettings(message[2]);
+      } else if (message[0] === 'partner') {
+        if (message[1] === 'get') {
+          setPartners(message[2])
+        }
+      } else if (message[0] === 'task') {
+        if (message[1] === 'get') {
+          setTasks(prevState => ([...prevState, ...message[2]]));
+        }
       } else if (message[0] === 'error') {
         if (message[1] === 'Token has expired') {
           handleRefresh();
@@ -271,6 +297,44 @@ const SocketProvider = ({ children }) => {
       sendMessage(JSON.stringify(["energy", "get"]));
     }
   }, [socket, energy])
+
+  useEffect(() => {
+    if (socket && !jackpot) {
+      sendMessage(JSON.stringify(["jackpot", "get"]));
+    }
+  }, [socket, jackpot])
+
+  useEffect(() => {
+    if (socket && !boosts) {
+      sendMessage(JSON.stringify(["boost", "get"]));
+    }
+  }, [socket, boosts])
+
+  useEffect(() => {
+    if (socket && !settings) {
+      sendMessage(JSON.stringify(["settings", "get"]));
+    }
+  }, [socket, settings])
+
+  useEffect(() => {
+    if (socket && !leaders) {
+      sendMessage(JSON.stringify(["user", "leaders"]));
+    }
+  }, [socket, leaders])
+
+  useEffect(() => {
+    if (socket && !partners) {
+      sendMessage(JSON.stringify(["partner", "get"]));
+    }
+  }, [socket, partners])
+
+  useEffect(() => {
+    if (socket && partners && tasks.length === 0) {
+      partners.forEach((partner) => {
+        sendMessage(JSON.stringify(["task", "get", partner._id]));
+      })
+    }
+  }, [socket, partners, tasks])
 
   return (
     <SocketContext.Provider value={{ sendMessage,
@@ -309,7 +373,14 @@ const SocketProvider = ({ children }) => {
                                      generationEnergy,
                                      setGenerationEneregy,
                                      gameResult,
-                                     setGameResult
+                                     setGameResult,
+
+                                     jackpot,
+                                     boosts,
+                                     settings, 
+                                     leaders,
+                                     partners,
+                                     tasks
                                    }}>
       {children}
     </SocketContext.Provider>

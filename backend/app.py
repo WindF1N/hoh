@@ -96,7 +96,8 @@ def verify():
             refresh_token = create_refresh_token(identity=user["email"])
             database.code.remove({"_id": result["_id"]})
             if verify_type == "email":
-                database.energy.create(result["user_id"], 3, 3, 12)
+                settings = database.settings.get()
+                database.energy.create(result["user_id"], settings["default_energy_limit"], settings["default_energy_value"], settings["default_energy_minutes"])
                 database.user.update(result["user_id"], {"$set": {"email_verified": True}})
                 return jsonify(access_token=access_token, refresh_token=refresh_token, follow={"link": "/crypto", "replace": True}), 200
             elif verify_type == "create_wallet" or verify_type == "import_wallet":
@@ -165,7 +166,9 @@ def handle_message(message):
             code_id = database.code.create(user["_id"], verify_code, datetime.now(timezone.utc))
             send_email(user["email"], f'Your verify code - {verify_code}', 'Paste this code to HOH.')
             emit('message', json.dumps([message[0], message[1], {"code_id": code_id, "verify_type": message[3], "follow": {"link": "/verify", "replace": True}}]))
-    
+        elif message[1] == 'leaders':
+            leaders = database.user.search({}, 'game_balance')
+            emit('message', json.dumps([message[0], message[1], leaders]))
     elif message[0] == 'energy':
         if message[1] == 'get':
             energy = database.energy.get({"user_id": user["_id"]})
@@ -183,9 +186,9 @@ def handle_message(message):
                 else:
                     emit('message', json.dumps([message[0], message[1], energy]))
             else:
-                energy_id = database.energy.create(user["_id"], 3, 3, 12)
+                settings = database.settings.get()
+                energy_id = database.energy.create(user["_id"], settings["default_energy_limit"], settings["default_energy_value"], settings["default_energy_minutes"])
                 emit('message', json.dumps([message[0], message[1], database.energy.get({"_id": energy_id})]))
-    
     elif message[0] == 'generation':
         if message[1] == 'get':
             energy = database.energy.get({"_id": message[2]})
@@ -219,49 +222,74 @@ def handle_message(message):
                     now = datetime.now(timezone.utc)
                     generation_id = database.generation.create(energy["_id"], now + timedelta(minutes=energy["minutes"]), now)
                     emit('message', json.dumps([message[0], message[1], message[2], database.generation.get({"_id": generation_id})]))
-    
     elif message[0] == 'boost':
-        energy = database.energy.get({"_id": message[2]})
-        game_balance = user["game_balance"]
-        if not energy:
-            return
-        if message[1] == "minutes:-1":
-            if energy["minutes"] > 5:
-                if user["game_balance"] >= 100 + 100 * (12 - energy["minutes"]):
-                    database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (100 + 100 * (12 - energy["minutes"]))}})
-                    database.energy.update(energy["_id"], {"$set": {"minutes": energy["minutes"] - 1}})
-                    emit('message', json.dumps([message[0], message[1], message[2], game_balance - (100 + 100 * (12 - energy["minutes"]))]))
-                    energy = database.energy.get({"_id": energy["_id"]})
-                    emit('message', json.dumps(["energy", "get", energy]))
-        elif message[1] == "limit:+1":
-            if energy["limit"] < 10:
-                if user["game_balance"] >= 100 + 100 * (energy["limit"] - 3):
-                    database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (100 + 100 * (energy["limit"] - 3))}})
-                    database.energy.update(energy["_id"], {"$set": {"limit": energy["limit"] + 1}})
-                    emit('message', json.dumps([message[0], message[1], message[2], game_balance - (100 + 100 * (energy["limit"] - 3))]))
-                    energy = database.energy.get({"_id": energy["_id"]})
-                    emit('message', json.dumps(["energy", "get", energy]))
-    
+        if message[1] == 'use':
+            energy = database.energy.get({"_id": message[2]})
+            if not energy:
+                return
+            boost = database.boost.get({"_id": message[3]})
+            if not boost:
+                return
+            settings = database.settings.get()
+            game_balance = user["game_balance"]
+            if boost["name"] == "minutes:-1":
+                if energy["minutes"] > settings["min_energy_minutes"]:
+                    if user["game_balance"] >= boost["price"] + boost["price"] * (settings["max_energy_minutes"] - energy["minutes"]):
+                        database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (boost["price"] + boost["price"] * (settings["max_energy_minutes"] - energy["minutes"]))}})
+                        database.energy.update(energy["_id"], {"$set": {"minutes": energy["minutes"] - 1}})
+                        emit('message', json.dumps([message[0], message[1], message[2], game_balance - (boost["price"] + boost["price"] * (settings["max_energy_minutes"] - energy["minutes"]))]))
+                        energy = database.energy.get({"_id": energy["_id"]})
+                        emit('message', json.dumps(["energy", "get", energy]))
+            elif boost["name"] == "limit:+1":
+                if energy["limit"] < settings["max_energy_limit"]:
+                    if user["game_balance"] >= boost["price"] + boost["price"] * (energy["limit"] - settings["min_energy_limit"]):
+                        database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (boost["price"] + boost["price"] * (energy["limit"] - settings["min_energy_limit"]))}})
+                        database.energy.update(energy["_id"], {"$set": {"limit": energy["limit"] + 1}})
+                        emit('message', json.dumps([message[0], message[1], message[2], game_balance - (boost["price"] + boost["price"] * (energy["limit"] - settings["min_energy_limit"]))]))
+                        energy = database.energy.get({"_id": energy["_id"]})
+                        emit('message', json.dumps(["energy", "get", energy]))
+        elif message[1] == 'get':
+            boosts = database.boost.search({})
+            emit('message', json.dumps(["boost", "get", boosts]))
     elif message[0] == 'game':
         energy = database.energy.get({"_id": message[1]})
         if not energy:
             return
         if energy["value"] <= 0:
             return
-        numbers = [1, 2, 3]
-        weights = [0.8, 0.15, 0.05]
+        cards = database.card.search({})
+        if len(cards) < 3:
+            return
+        numbers = [card for card in cards]
+        weights = [card['chance'] for card in cards]
         list_length = 3
         random_list = random.choices(numbers, weights, k=list_length)
         database.energy.update(energy["_id"], {"$set": {"value": energy["value"] - 1}})
         game_balance = user["game_balance"]
         balance = user["balance"]
-        if random_list[message[2]] == 2:
-            database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] + 10000}})
-            game_balance += 10000
-        elif random_list[message[2]] == 3:
-            database.user.update(user["_id"], {"$set": {"balance": user["balance"] + 999}})
-            balance += 999
+        if random_list[message[2]]["name"].split(":")[0] == "game_balance_up":
+            game_balance += int(random_list[message[2]]["name"].split(":")[1])
+            database.user.update(user["_id"], {"$set": {"game_balance": game_balance }})
+        elif random_list[message[2]]["name"].split(":")[0] == "jackpot":
+            jackpot = database.jackpot.get({})
+            jackpot_part = int(float(int(random_list[message[2]]["name"].split(":")[1].replace("%", "")) / 100) * jackpot["balance"])
+            balance += jackpot_part
+            database.user.update(user["_id"], {"$set": {"balance": balance}})
+            database.jackpot.update(jackpot["_id"], {"$set": {"balance": jackpot["balance"] - jackpot_part}})
         emit('message', json.dumps([message[0], message[1], message[2], random_list, game_balance, balance]))
+    elif message[0] == 'jackpot':
+        if message[1] == 'get':
+            emit('message', json.dumps([message[0], message[1], database.jackpot.get()]))
+    elif message[0] == 'settings':
+        if message[1] == 'get':
+            emit('message', json.dumps([message[0], message[1], database.settings.get()]))
+    elif message[0] == 'partner':
+        if message[1] == 'get':
+            emit('message', json.dumps([message[0], message[1], database.partner.search({})]))
+    elif message[0] == 'task':
+        if message[1] == 'get':
+            emit('message', json.dumps([message[0], message[1], database.task.search({"partner_id": message[2]})]))
+    
     
 @socketio.on_error_default
 def default_error_handler(e):
