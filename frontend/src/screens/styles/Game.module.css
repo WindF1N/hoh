@@ -235,9 +235,18 @@
   margin-top: 20px;
   display: flex;
   flex-flow: column;
+  max-height: 60vh;
+  overflow-y: auto;
 
   gap: 20px;
   color: #fff;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.boostsList::-webkit-scrollbar {
+  display: none;
 }
 
 .boostsItem {
@@ -432,7 +441,17 @@
   color: #fff;
 
   padding: 0 0px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+
+.leadersList::-webkit-scrollbar {
+  display: none;
+}
+
 .leader {
   display: flex;
   align-items: center;
@@ -454,7 +473,7 @@
 
   color: #ccc;
 
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
   letter-spacing: -.2px;
 }

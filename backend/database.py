@@ -318,12 +318,6 @@ class Partner:
                             "name": "HOH Game",
                             "description": "Играйте и выигрывайте $HAMC или $HOH",
                             "price": 4
-                        },
-                        {
-                            "icon": "/partners/HAMC2.svg",
-                            "name": "HOH Game 2",
-                            "description": "Играйте и выигрывайте $HAMC или $HOH",
-                            "price": 2
                         }
                     ]
                 )
@@ -360,6 +354,27 @@ class Partner:
 class Task:
     def __init__(self, mongo):
         self.mongo = mongo
+        if not self.is_exists({}):
+            self.mongo.db.tasks.insert_many(
+                prepare_data_for_db(
+                    [
+                        {
+                            "partner_id": self.mongo.db.partners.find_one({})["_id"],
+                            "name": "HOH Game",
+                            "description": "Follow in Telegram",
+                            "upload": False,
+                            "link": "https://t.me/botFather"
+                        },
+                        {
+                            "partner_id": self.mongo.db.partners.find_one({})["_id"],
+                            "name": "Upload Screenshots",
+                            "description": "Загрузите до 10 скриншотов подтверждающие выполненное задание",
+                            "upload": True,
+                            "link": ""
+                        }
+                    ]
+                )
+            )
 
     def create(self, partner_id, name, description, upload, link):
         return prepare_data_for_client(

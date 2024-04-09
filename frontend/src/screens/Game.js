@@ -358,21 +358,30 @@ function Game() {
             </div>
             <div className={styles.taskList}>
               {tasks.filter((task) => task.partner_id === selectedPartnerId).map((task) => (
-                <Link to={task.link}>
+                task.upload ?
                   <div className={styles.taskItem} key={task._id}>
                     <div>
-                      <div className={styles.taskIcon}>
-                        <img src={require("./images/alt-arrow-right-line-duotone.svg").default} alt="" />
-                      </div>
                       <div className={styles.taskInformation}>
                         <div className={styles.taskItemTitle}>{task.name}</div>
                         <div className={styles.taskItemDescription}>{task.description}</div>
                       </div>
                     </div>
-                    {task.upload &&
-                      <ButtonHOH text="Upload" reverse={true} />}
+                    <ButtonHOH text="Upload" reverse={true} />
                   </div>
-                </Link>
+                :
+                  <Link to={task.link}>
+                    <div className={styles.taskItem} key={task._id}>
+                      <div>
+                        <div className={styles.taskIcon}>
+                          <img src={require("./images/alt-arrow-right-line-duotone.svg").default} alt="" />
+                        </div>
+                        <div className={styles.taskInformation}>
+                          <div className={styles.taskItemTitle}>{task.name}</div>
+                          <div className={styles.taskItemDescription}>{task.description}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
               ))}
             </div>
           </Modal>}

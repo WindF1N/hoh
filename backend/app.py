@@ -238,6 +238,7 @@ def handle_message(message):
                         database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (boost["price"] + boost["price"] * (settings["max_energy_minutes"] - energy["minutes"]))}})
                         database.energy.update(energy["_id"], {"$set": {"minutes": energy["minutes"] - 1}})
                         emit('message', json.dumps([message[0], message[1], message[2], game_balance - (boost["price"] + boost["price"] * (settings["max_energy_minutes"] - energy["minutes"]))]))
+                        database.user_boost.create(boost["_id"], user["game_balance"], energy["limit"], energy["minutes"], datetime.now(timezone.utc))
                         energy = database.energy.get({"_id": energy["_id"]})
                         emit('message', json.dumps(["energy", "get", energy]))
             elif boost["name"] == "limit:+1":
@@ -246,6 +247,7 @@ def handle_message(message):
                         database.user.update(user["_id"], {"$set": {"game_balance": user["game_balance"] - (boost["price"] + boost["price"] * (energy["limit"] - settings["min_energy_limit"]))}})
                         database.energy.update(energy["_id"], {"$set": {"limit": energy["limit"] + 1}})
                         emit('message', json.dumps([message[0], message[1], message[2], game_balance - (boost["price"] + boost["price"] * (energy["limit"] - settings["min_energy_limit"]))]))
+                        database.user_boost.create(boost["_id"], user["game_balance"], energy["limit"], energy["minutes"], datetime.now(timezone.utc))
                         energy = database.energy.get({"_id": energy["_id"]})
                         emit('message', json.dumps(["energy", "get", energy]))
         elif message[1] == 'get':
@@ -264,6 +266,8 @@ def handle_message(message):
         weights = [card['chance'] for card in cards]
         list_length = 3
         random_list = random.choices(numbers, weights, k=list_length)
+        game_id = database.game.create(user["_id"], datetime.now(timezone.utc))
+        database.deck.create(game_id, random_list, message[2])
         database.energy.update(energy["_id"], {"$set": {"value": energy["value"] - 1}})
         game_balance = user["game_balance"]
         balance = user["balance"]
